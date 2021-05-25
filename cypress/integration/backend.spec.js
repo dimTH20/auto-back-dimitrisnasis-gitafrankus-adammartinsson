@@ -9,7 +9,7 @@ import * as bill from '../helpers/billHelpers'
 describe('Test suite', () => {
 
     it('TC1 Invalid Login', () => {
-        login.performInvalidLogin()
+        login.performInvalidLoginRequest()
     })
 
 
@@ -25,7 +25,7 @@ describe('Test suite', () => {
 
     it('TC4 Create Room', () => {
         cy.authenticate().then((response => {
-            room.createRoom()
+            room.createRoomRequest()
         }))
         cy.logout()
     })
@@ -33,8 +33,8 @@ describe('Test suite', () => {
 
     it('TC5 Delete Room', () => {
         cy.authenticate().then((response => {
-            room.createRoom()
-            room.deleteRoom()
+            room.createRoomRequest()
+            room.deleteRoomRequest()
         }))
         cy.logout()
     })

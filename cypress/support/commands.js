@@ -25,22 +25,21 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 
+import * as targets from '../targets/targets'
+
 Cypress.Commands.add('authenticate', () => {
-    const USER_CREDENTIALS = {
-        "username": "tester01",
-        "password": "GteteqbQQgSr88SwNExUQv2ydb7xuf8c"
-    }
-    //header data is case sensitive
+    const USER_CREDENTIALS = targets.correctLogin
+
     cy.request({
         method: 'POST',
-        url: 'http://localhost:3000/api/login',
+        url: targets.loginURL,
         headers: {
             'Content-Type': 'application/json'
         },
         body: USER_CREDENTIALS
     }).then((response => {
         expect(response.status).to.eq(200)
-        Cypress.env({loginToken:response.body})  //adds global variable
+        Cypress.env({loginToken:response.body}) 
         cy.log(response.body)
     }))
 })
@@ -48,7 +47,7 @@ Cypress.Commands.add('authenticate', () => {
 Cypress.Commands.add('logout', () => {
     cy.request({
         method: 'POST',
-        url: 'http://localhost:3000/api/logout',
+        url: targets.logoutURL,
         headers: {
             'X-User-Auth':JSON.stringify(Cypress.env().loginToken),
             'Content-Type':'application/json'

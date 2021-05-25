@@ -1,5 +1,6 @@
 /// <reference types="Cypress" />
 
+import * as targets from '../targets/targets'
 
 //functions
 function createBillPayload() {
@@ -19,7 +20,7 @@ function editBillPayload(id) {
 function createBillRequest() {
     cy.request({
         method: 'POST',
-        url: 'http://localhost:3000/api/bill/new',
+        url: targets.newBillURL,
         headers: {
             'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
             'Content-Type': 'application/json'
@@ -34,7 +35,7 @@ function createBillRequest() {
 function editBillRequest() {
     cy.request({
         method: 'GET', 
-        url: 'http://localhost:3000/api/bills', 
+        url: targets.billsURL, 
         headers: {
             'X-User-Auth':JSON.stringify(Cypress.env().loginToken), 
             'Content-Type': 'application/json'
@@ -45,7 +46,7 @@ function editBillRequest() {
         cy.log(lastID)
         cy.request({
             method: 'PUT',
-            url: 'http://localhost:3000/api/bill/' + lastID,
+            url: targets.billURL + lastID,
             headers: {
                 'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
                 'Content-Type': 'application/json'
@@ -62,7 +63,7 @@ function editBillRequest() {
 function deleteBillRequest() {
     cy.request({
         method: 'GET', 
-        url: 'http://localhost:3000/api/bills', 
+        url: targets.billsURL, 
         headers: {
             'X-User-Auth':JSON.stringify(Cypress.env().loginToken), 
             'Content-Type': 'application/json'
@@ -73,7 +74,7 @@ function deleteBillRequest() {
         cy.log(lastID)
         cy.request({
             method: 'DELETE',
-            url: 'http://localhost:3000/api/bill/' + lastID,
+            url: targets.billURL + lastID,
             headers: {
                 'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
                 'Content-Type': 'application/json'

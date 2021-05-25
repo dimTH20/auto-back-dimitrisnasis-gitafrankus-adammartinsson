@@ -26,27 +26,37 @@ function createRoom() {
         body: createRoomPayload()
     }).then((response => {
         expect(response.status).to.eq(200)
-
-        Cypress.env({newRoomID:response.body.id})
-        cy.log(Cypress.env().newRoomID)
-
         cy.log(JSON.stringify(response.body))
-
+        cy.log(JSON.stringify(response.body.id))
     }))
+
 }
 
 
-function deleteRoom(roomID) {
+function deleteRoom() {
     cy.request({
-        method: 'DELETE',
-        url: 'http://localhost:3000/api/room/' + roomID,  // add the new room id to the endpoint
+        method: 'GET', 
+        url: 'http://localhost:3000/api/rooms', 
         headers: {
-            'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
+            'X-User-Auth':JSON.stringify(Cypress.env().loginToken), 
             'Content-Type': 'application/json'
-        },
-    }).then((response => {
+        }
+    }).then((response =>{
         expect(response.status).to.eq(200)
-        cy.log(JSON.stringify(response.body))
+        let lastID = response.body[response.body.length -1].id
+        cy.log(lastID)
+
+        cy.request({
+            method: 'DELETE',
+            url: 'http://localhost:3000/api/room/' + lastID,  // add the last room id to the endpoint
+            headers: {
+                'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
+                'Content-Type': 'application/json'
+            },
+        }).then((response => {
+            expect(response.status).to.eq(200)
+            cy.log(JSON.stringify(response.body))
+        }))
     }))
 }
 

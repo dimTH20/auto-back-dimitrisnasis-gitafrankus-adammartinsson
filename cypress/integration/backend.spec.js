@@ -3,6 +3,7 @@
 import * as login from '../helpers/loginHelpers'
 import * as room from '../helpers/roomHelpers'
 import * as client from '../helpers/clientHelpers'
+import * as bill from '../helpers/billHelpers'
 
 
 describe('Test suite', () => {
@@ -26,7 +27,6 @@ describe('Test suite', () => {
         cy.authenticate().then((response => {
             room.createRoom()
         }))
-
         cy.logout()
     })
 
@@ -34,75 +34,24 @@ describe('Test suite', () => {
     it('TC5 Delete Room', () => {
         cy.authenticate().then((response => {
             room.createRoom()
-            room.deleteRoom(Cypress.env().newRoomID)
+            room.deleteRoom()
         }))
         cy.logout()
     })
 
 
     it('TC6 Create Client', () => {
-
-        /*
         cy.authenticate().then((response => {
-        client.createClientRequest()
-        client.deleteClientRequest(cypress.env().lastID)  // alternativt, skapa en getLastClientRequest()
-        client.performLogout()
-    }))
-    
-    */
-
-        cy.authenticate().then((response => {
-            cy.request({
-                method: 'POST',
-                url: 'http://localhost:3000/api/client/new',
-                headers: {
-                    'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
-                    'Content-Type': 'application/json'
-                },
-                body: {
-                    'name': 'stefan', 'email': 'stefan@mail.com', 'telephone': '0700000000'
-                }
-            }).then((response => {
-                expect(response.status).to.eq(200)
-                cy.log(JSON.stringify(response.body))
-            }))
+            client.createClientRequest()
         }))
-
         cy.logout()
-
     })
 
 
     it('TC7 Delete Client', () => {
         cy.authenticate().then((response => {
-            cy.request({
-                method: 'POST',
-                url: 'http://localhost:3000/api/client/new',
-                headers: {
-                    'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
-                    'Content-Type': 'application/json'
-                },
-                body: {
-                    'name': 'stefan', 'email': 'stefan@mail.com', 'telephone': '0700000000'
-                }
-            }).then((response => {
-                expect(response.status).to.eq(200)
-                cy.log(JSON.stringify(response.body))
-                let newClientID = response.body.id
-                cy.log(newClientID)
-
-                cy.request({
-                    method: 'DELETE',
-                    url: 'http://localhost:3000/api/client/' + newClientID,
-                    headers: {
-                        'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
-                        'Content-Type': 'application/json'
-                    },
-                }).then((response => {
-                    expect(response.status).to.eq(200)
-                    cy.log(JSON.stringify(response.body))
-                }))
-            }))
+            client.createClientRequest()
+            client.deleteClientRequest()
         }))
         cy.logout()
     })
@@ -110,20 +59,7 @@ describe('Test suite', () => {
 
     it('TC8 Create Bill', () => {
         cy.authenticate().then((response => {
-            cy.request({
-                method: 'POST',
-                url: 'http://localhost:3000/api/bill/new',
-                headers: {
-                    'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
-                    'Content-Type': 'application/json'
-                },
-                body: {
-                    'value': '120', 'paid': true
-                }
-            }).then((response => {
-                expect(response.status).to.eq(200)
-                cy.log(JSON.stringify(response.body))
-            }))
+            bill.createBillRequest()
         }))
         cy.logout()
     })
@@ -131,38 +67,8 @@ describe('Test suite', () => {
 
     it('TC9 Edit Bill', () => {
         cy.authenticate().then((response => {
-            cy.request({
-                method: 'POST',
-                url: 'http://localhost:3000/api/bill/new',
-                headers: {
-                    'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
-                    'Content-Type': 'application/json'
-                },
-                body: {
-                    'value': '120', 'paid': true
-                }
-            }).then((response => {
-                expect(response.status).to.eq(200)
-                cy.log(JSON.stringify(response.body))
-
-                let newBillID = response.body.id
-                cy.log(newBillID)
-                cy.request({
-                    method: 'PUT',
-                    url: 'http://localhost:3000/api/bill/' + newBillID,
-                    headers: {
-                        'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
-                        'Content-Type': 'application/json'
-                    },
-                    body: {
-                        "value": "100", "paid": true, "id": newBillID, "created": "2021-05-16T12:27:00.279Z"
-                    }
-                }).then((response => {
-                    expect(response.status).to.eq(200)
-                    cy.log(JSON.stringify(response.body))
-                }))
-
-            }))
+            bill.createBillRequest()
+            bill.editBillRequest()
         }))
         cy.logout()
     })
@@ -170,35 +76,8 @@ describe('Test suite', () => {
 
     it('TC10 Delete Bill', () => {
         cy.authenticate().then((response => {
-            cy.request({
-                method: 'POST',
-                url: 'http://localhost:3000/api/bill/new',
-                headers: {
-                    'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
-                    'Content-Type': 'application/json'
-                },
-                body: {
-                    'value': '120', 'paid': true
-                }
-            }).then((response => {
-                expect(response.status).to.eq(200)
-                cy.log(JSON.stringify(response.body))
-
-                let newBillID = response.body.id
-                cy.log(newBillID)
-                cy.request({
-                    method: 'DELETE',
-                    url: 'http://localhost:3000/api/bill/' + newBillID,
-                    headers: {
-                        'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
-                        'Content-Type': 'application/json'
-                    }
-                }).then((response => {
-                    expect(response.status).to.eq(200)
-                    cy.log(JSON.stringify(response.body))
-                }))
-
-            }))
+            bill.createBillRequest()
+            bill.deleteBillRequest()
         }))
         cy.logout()
     })

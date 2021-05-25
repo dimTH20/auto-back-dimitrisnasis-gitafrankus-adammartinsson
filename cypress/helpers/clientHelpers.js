@@ -21,7 +21,7 @@ function createClientRequest() {
             'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
             'Content-Type': 'application/json'
         },
-        body: createClientPayload
+        body: createClientPayload()
     }).then((response => {
         expect(response.status).to.eq(200)
         cy.log(JSON.stringify(response.body))

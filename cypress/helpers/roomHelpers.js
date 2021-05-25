@@ -1,24 +1,25 @@
 /// <reference types="Cypress" />
 
+import * as targets from '../targets/targets'
 
 //functions
 function createRoomPayload() {
     let roomPayload = {
         "features": ["balcony"], 
         "category": "double", 
-        "number": "103", 
-        "floor": "3", 
+        "number": targets.randomNumber1, 
+        "floor": targets.randomNumber2, 
         "available": true, 
-        "price": "123"
+        "price": targets.randomNumber3
     }
 
     return roomPayload
 }
 
-function createRoom() {
+function createRoomRequest() {
     cy.request({
         method: 'POST',
-        url: 'http://localhost:3000/api/room/new',
+        url: targets.newRoomURL,
         headers: {
             'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
             'Content-Type': 'application/json'
@@ -33,10 +34,10 @@ function createRoom() {
 }
 
 
-function deleteRoom() {
+function deleteRoomRequest() {
     cy.request({
         method: 'GET', 
-        url: 'http://localhost:3000/api/rooms', 
+        url: targets.roomsURL, 
         headers: {
             'X-User-Auth':JSON.stringify(Cypress.env().loginToken), 
             'Content-Type': 'application/json'
@@ -48,7 +49,7 @@ function deleteRoom() {
 
         cy.request({
             method: 'DELETE',
-            url: 'http://localhost:3000/api/room/' + lastID,  // add the last room id to the endpoint
+            url: targets.roomURL + lastID,  
             headers: {
                 'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
                 'Content-Type': 'application/json'
@@ -63,7 +64,7 @@ function deleteRoom() {
 //exports
 module.exports = {
     createRoomPayload,
-    createRoom,
-    deleteRoom
+    createRoomRequest,
+    deleteRoomRequest
 
 }

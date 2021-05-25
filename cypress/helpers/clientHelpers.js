@@ -1,12 +1,13 @@
 /// <reference types="Cypress" />
 
-const faker = require('faker')
+import * as targets from '../targets/targets'
+
 //functions
 function createClientPayload() {
     let clientPayload = {
-        'name': faker.name.firstName(),
-        'email': faker.internet.email(),
-        'telephone': faker.phone.phoneNumber()
+        'name': targets.randomName,
+        'email': targets.randomEmail,
+        'telephone': targets.randomPhone
     }
 
     return clientPayload
@@ -15,7 +16,7 @@ function createClientPayload() {
 function createClientRequest() {
     cy.request({
         method: 'POST',
-        url: 'http://localhost:3000/api/client/new',
+        url: targets.newClientURL,
         headers: {
             'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
             'Content-Type': 'application/json'
@@ -31,7 +32,7 @@ function createClientRequest() {
 function deleteClientRequest() {
     cy.request({
         method: 'GET', 
-        url: 'http://localhost:3000/api/clients', 
+        url: targets.clientsURL, 
         headers: {
             'X-User-Auth':JSON.stringify(Cypress.env().loginToken), 
             'Content-Type': 'application/json'
@@ -43,7 +44,7 @@ function deleteClientRequest() {
 
         cy.request({
             method: 'DELETE',
-            url: 'http://localhost:3000/api/client/' + lastID, 
+            url: targets.clientURL + lastID, 
             headers: {
                 'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
                 'Content-Type': 'application/json'
@@ -56,19 +57,7 @@ function deleteClientRequest() {
 }
 
 
-function performLogout() {
-    cy.request({
-        method: 'POST',
-        url: 'http://localhost:3000/api/logout',
-        headers: {
-            'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
-            'Content-Type': 'application/json'
-        }
-    }).then((response => {
-        expect(response.status).to.eq(200)
-        //cy.log(JSON.stringify(response.body))
-    }))
-}
+
 
 
 
@@ -76,6 +65,5 @@ function performLogout() {
 module.exports = {
     createClientPayload,
     createClientRequest,
-    deleteClientRequest,
-    performLogout
+    deleteClientRequest
 }

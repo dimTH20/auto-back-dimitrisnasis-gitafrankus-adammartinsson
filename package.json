@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "cypress:run": "cypress run --reporter mochawesome --headless --browser chrome",
     "cypress:open": "cypress open",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -29,6 +30,7 @@
     "@vue/cli-plugin-typescript": "^4.2.0",
     "@vue/cli-service": "^4.2.0",
     "cypress": "^7.3.0",
+    "mochawesome": "^6.2.2",
     "node-sass": "^4.12.0",
     "nodemon": "^2.0.2",
     "sass-loader": "^8.0.2",

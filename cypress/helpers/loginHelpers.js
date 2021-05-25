@@ -1,10 +1,12 @@
 /// <reference types="Cypress" />
 
+import * as targets from '../targets/targets'
+
 //functions
-function performInvalidLogin() {
+function performInvalidLoginRequest() {
     cy.request({
         method: 'POST',
-        url: 'http://localhost:3000/api/login',
+        url: targets.loginURL,
         failOnStatusCode: false,
         headers: {
             'Content-Type': 'application/json'
@@ -26,6 +28,6 @@ function performInvalidLogin() {
 
 //exports
 module.exports = {
-    performInvalidLogin
+    performInvalidLoginRequest
 
 }

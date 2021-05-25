@@ -19,3 +19,5 @@ yarn-error.log*
 *.sw?
 
 node_modules
+videos
+report

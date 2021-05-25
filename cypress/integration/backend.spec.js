@@ -1,30 +1,14 @@
 /// <reference types="Cypress" />
 
+import * as login from '../helpers/loginHelpers'
+import * as room from '../helpers/roomHelpers'
+import * as client from '../helpers/clientHelpers'
+
+
 describe('Test suite', () => {
 
     it('TC1 Invalid Login', () => {
-
-        cy.request({
-            method: 'POST',
-            url: 'http://localhost:3000/api/login',
-            failOnStatusCode: false,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: {
-                'username': 'tester01',
-                'password': 'tester01'
-            }
-
-        }).then((response => {
-            expect(response.status).to.eq(401)
-            cy.log(JSON.stringify(response.status))
-
-            const errormessage = JSON.stringify(response.body)
-            expect(errormessage).to.equal('{"error":"Bad username or password"}')
-            cy.log(errormessage)
-        }))
-
+        login.performInvalidLogin()
     })
 
 
@@ -35,69 +19,38 @@ describe('Test suite', () => {
 
     it('TC3 Logout', () => {
         cy.logout()
-
     })
 
 
     it('TC4 Create Room', () => {
         cy.authenticate().then((response => {
-            cy.request({
-                method: 'POST',
-                url: 'http://localhost:3000/api/room/new',
-                headers: {
-                    'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
-                    'Content-Type': 'application/json'
-                },
-                body: {
-                    "features": ["balcony"], "category": "double", "number": "103", "floor": "3", "available": true, "price": "123"
-                }
-            }).then((response => {
-                expect(response.status).to.eq(200)
-                cy.log(JSON.stringify(response.body))
-            }))
+            room.createRoom()
         }))
 
         cy.logout()
-
     })
 
 
     it('TC5 Delete Room', () => {
         cy.authenticate().then((response => {
-            cy.request({
-                method: 'POST',
-                url: 'http://localhost:3000/api/room/new',
-                headers: {
-                    'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
-                    'Content-Type': 'application/json'
-                },
-                body: {
-                    "features": ["balcony"], "category": "double", "number": "103", "floor": "3", "available": true, "price": "123"
-                }
-            }).then((response => {
-                expect(response.status).to.eq(200)
-                cy.log(JSON.stringify(response.body))
-                let newRoomID = response.body.id  //adds local variable to store the new room id in newRoomID
-                cy.log(newRoomID)
-
-                cy.request({
-                    method: 'DELETE',
-                    url: 'http://localhost:3000/api/room/' + newRoomID,  // add the new room id to the endpoint
-                    headers: {
-                        'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
-                        'Content-Type': 'application/json'
-                    },
-                }).then((response => {
-                    expect(response.status).to.eq(200)
-                    cy.log(JSON.stringify(response.body))
-                }))
-            }))
+            room.createRoom()
+            room.deleteRoom(Cypress.env().newRoomID)
         }))
         cy.logout()
     })
 
 
     it('TC6 Create Client', () => {
+
+        /*
+        cy.authenticate().then((response => {
+        client.createClientRequest()
+        client.deleteClientRequest(cypress.env().lastID)  // alternativt, skapa en getLastClientRequest()
+        client.performLogout()
+    }))
+    
+    */
+
         cy.authenticate().then((response => {
             cy.request({
                 method: 'POST',
